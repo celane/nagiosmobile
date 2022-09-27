@@ -43,6 +43,9 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/
 install nagiosmobile_apache.conf $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/nagios
 install update_nagiosmobile_config.pl $RPM_BUILD_ROOT%{_sysconfdir}/nagios/
+install -d $RPM_BUILD_ROOT%{_defaultdocdir}/%{name}
+install LICENSE README CHANGES TODO.txt $RPM_BUILD_DIR%{_defaultdocdir}/%{name}
+
 
 %files
 %doc README CHANGES TODO.txt
