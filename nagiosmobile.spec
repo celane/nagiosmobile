@@ -10,12 +10,6 @@ Summary:        Nagios for mobile devices
 License:        GNU 2.0
 URL:            https://github.com/celane/nagiosmobile
 #URL:            http://www.nagios.com/products/nagios-mobile
-#Source0:        nagiosmobile.tar.gz
-#Source1:        update_nagiosmobile_config.pl
-#Source2:        nagiosmobile_apache.conf
-#Patch:          CEL_20220920.patch
-
-#BuildRoot:       %{_tmppath}/%{name}-%{version}-%{release}
 
 BuildRequires:  perl
 BuildRequires:  git
