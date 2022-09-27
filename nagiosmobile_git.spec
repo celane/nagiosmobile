@@ -1,5 +1,3 @@
-# build from .tar.gz version
-#
 %define version 1.03
 %define relnum 5
 %define NVdir %{name}-%{version}
