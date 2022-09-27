@@ -19,6 +19,9 @@ while(<RPM>) {
 }
 close(RPM);
 
+system('rpm -q pnp4nagios 2>/dev/null');
+my $pnp4nagios = ($! == 0);
+
 
 open(CFG,"<$CFG")
     or die "unable to open $CFG for reading";
@@ -61,8 +64,13 @@ while (<INC_IN>) {
             print $fh "\$CGI_FILE = \"$CGI\";\n";
         } elsif (/^\$OBJECTS_FILE/) {
             print $fh "\$OBJECTS_FILE = \"$OBJCF\";\n";
+        } elsif (/^ACTION_HOST/ && $pnp4nagios) { 
+            print $fh "\$ACTION_HOST = \"/pnp4nagios/index.php/mobile/graph/\%s/__HOST__\"\n";
+        } elsif (/^ACTION_SERVICE/ && $pnp4nagios) { 
+            print $fh "\$ACTION_SERVICE =  \"/pnp4nagios/index.php/mobile/graph/\%s/\%s\"\n";
         } elsif (/^DO\s+NOT\s+MAKE\s+CHANGES\s+BELOW/i) {
             $doedit = 0;
+
         } else {
             print $fh $_;
         }

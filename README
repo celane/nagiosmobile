@@ -85,7 +85,9 @@ PREREQUISITES
 - Update the file location of htpasswd.users in the nagiosmobile_apache.conf file.  
 - For larger installations, you can install php-apc (or php-pear-apc) to cache your status data for faster page load times. 
 - If using apc, be sure to add 'apc.enabled=1' to your php.ini file restart apache to enable it.  
-
+- to make use of pnp4nagios graphing, edit the 'ACTION' entries in
+  include.inc.php (if the update_nagiosmobile_config.pl script didn't
+  do so already)
 
 INSTALLATION
 =============
@@ -95,7 +97,10 @@ INSTALLATION
 - Access the nagiosmobile site via http://<YOUR HOST>/nagiosmobile
 - If you get an authentication error, the file location of htpasswd.users in the nagiosmobile.conf file that should be
   located in your apache configurations directory (/etc/httpd/conf.d for RHEL/CentOS or /etc/apache2/conf.d/ for Ubuntu/Debian).
-
+- nagiosmobile needs a username in the http request, either from using
+  'basic' configuration, 'digest' configuration, a 'hardcoded' (no security)
+  configuation in included.inc.php, OR using SSL_CLIENT_I_DN_CN for
+  client-certificate authentication. 
 
 LICENSE & CONTRIBUTION
 =======================

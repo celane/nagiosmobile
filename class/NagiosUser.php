@@ -137,7 +137,8 @@ class NagiosUser
 	}
 	
 	/**
-	*	determines authorized user, checks for hard-coded name, then Basic Auth, then Digest auth.  Sets $this->username
+	*	determines authorized user, checks for hard-coded name, then Basic Auth, then Digest auth.
+	*	then SSL certificate CN. Sets $this->username
 	*	@global string $username
 	*	@return string $this->username
 	*/
@@ -163,7 +164,15 @@ class NagiosUser
 			//echo "Auth Digest detected".$_SERVER['PHP_AUTH_USER'];
 			$this->username =   $_SERVER['PHP_AUTH_USER'];
 		}
+		// SSL client certificate CN
+		elseif(isset($_SERVER['SSL_CLIENT_I_DN_CN']))
+		{
+			// echo "SSL client cert ".$_SERVER['SSL_CLIENT_I_DN_CN'];
+			
+			$this->username = $_SERVER['SSL_CLIENT_I_DN_CN'];
+		}		
 
+		
 		if(!$this->username)
 			return false; 
 		else

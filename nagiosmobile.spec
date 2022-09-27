@@ -10,11 +10,12 @@ Release:        %{relnum}%{?dist}
 Summary:        Nagios for mobile devices
 
 License:        GNU 2.0
+
 URL:            https://github.com/celane/nagiosmobile
 #URL:            http://www.nagios.com/products/nagios-mobile
+Source:          https://github.com/celane/nagiosmobile/archive/refs/tags/nagiosmobile-1.03-5.tar.gz
 
 BuildRequires:  perl
-BuildRequires:  git
 Requires:       php >= 8.0
 Requires:       nagios
 Requires:       httpd
@@ -23,15 +24,11 @@ Requires:       httpd
 Web interface from mobile devices to Nagios
 
 %prep
-### build from git ###
-rm -rf %{NVdir}
-git clone %{url}.git %{NVdir}
-
+%setup
 
 %build
 
 %install
-cd %{NVdir}
 if [ "$RPM_BUILD_ROOT" != "/" ]; then
    rm -rf $RPM_BUILD_ROOT
 fi 

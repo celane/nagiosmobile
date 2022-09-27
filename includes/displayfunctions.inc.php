@@ -84,6 +84,7 @@ function host_details($hostname)
 	global $status; 
 	global $HOST_STATUS_BY;
 	global $BASE_URL;
+        global $ACTION_HOST;
 
 	$content = ''; 
 	
@@ -97,7 +98,12 @@ function host_details($hostname)
 		$duration = stringize_duration(get_time_breakdown($status, $host_status)); 
 		$notifs = $host_status["notifications_enabled"] == 1 ? "Enabled" : "Disabled"; 
 		$dt = $host_status["scheduled_downtime_depth"] > 0 ? "Yes" : "No"; 
-		$ack = $host_status["problem_has_been_acknowledged"] > 0 ? "Yes" : "No"; 
+		$ack = $host_status["problem_has_been_acknowledged"] > 0 ? "Yes" : "No";
+                $hostaction = "";
+                if ($ACTION_HOST != "")
+                {
+                        $hostaction = sprintf("<a href=\"".$ACTION_HOST."\"><img src=\"action.gif\"></a>",$host);
+                }             
 		
 		$content .=' 
 		<!-- host details ============================================================ -->
@@ -115,8 +121,7 @@ function host_details($hostname)
 			<a href="index.php" alax-load="false" data-icon="home" data-iconpos="notext"  data-direction="reverse" class="ui-btn-right">Home</a>
 		  </div>
 			<ul data-role="listview" data-inset="false" data-theme="f" data-dividertheme="a">
-			<li data-role="list-divider" role="heading">Information
-			        <a href="/pnp4nagios/index.php/mobile/graph/'.$host.'/_HOST_"><img src="action.gif"></a>
+			<li data-role="list-divider" role="heading">Information '.$hostaction.'
 				<div class="information rounded">
 				  <dl>
 				  	<dt>Host: </dt><dd>'.htmlentities($host).'</dd>
@@ -194,6 +199,10 @@ function hostservice_details($serviceID)
 	global $status; 
 	global $SERVICE_STATUS_BY;
 	global $BASE_URL;
+        global $ACTION_SERVICE;
+
+
+
 
 	$content = ''; 
 
@@ -216,6 +225,12 @@ function hostservice_details($serviceID)
 			$stateclass = class_by_state($service_status["current_state"],true); 
 			$textstate = $SERVICE_STATUS_BY[ $service_status["current_state"] ]; 
 			$service = $service_status['service_description']; 
+
+                        $serviceaction = "";
+                        if ($ACTION_SERVICE != "")
+                        {
+                                $serviceaction = sprintf("<a href=\"".$ACTION_SERVICE."\"><img src=\"action.gif\"></a>",$host,$service);
+                        }             
 			
 			$content .='
 			<div data-role="page" id="'.$host_id.'_'.$service_id.'" data-theme="a">
@@ -233,10 +248,8 @@ function hostservice_details($serviceID)
 			  </div> <!-- end header -->
 
 				<ul data-role="listview" data-inset="false" data-theme="f" data-dividertheme="a">
-				<li data-role="list-divider" role="heading">Information
+				<li data-role="list-divider" role="heading">Information '.$action_service.'
 					<div class="information rounded">
-					  <a href="/pnp4nagios/index.php/mobile/graph/'.$host.'/'.$service.'"><img src="action.gif"></a>
-
 					  <dl>
 					  	<dt>Host: </dt><dd>'.htmlentities($host).'</dd>
 					  	<dt>Service: </dt><dd>'.htmlentities($service).'</dd>
