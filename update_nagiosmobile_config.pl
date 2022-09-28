@@ -64,7 +64,7 @@ while (<INC_IN>) {
         } elsif (/^\$OBJECTS_FILE/) {
             print $fh "\$OBJECTS_FILE = \"$OBJCF\";\n";
         } elsif (/^\$ACTION_HOST/ && $pnp4nagios) { 
-            print $fh "\$ACTION_HOST = \"/pnp4nagios/index.php/mobile/graph/\%s/__HOST__\";\n";
+            print $fh "\$ACTION_HOST = \"/pnp4nagios/index.php/mobile/graph/\%s/_HOST_\";\n";
         } elsif (/^\$ACTION_SERVICE/ && $pnp4nagios) { 
             print $fh "\$ACTION_SERVICE =  \"/pnp4nagios/index.php/mobile/graph/\%s/\%s\";\n";
         } elsif (/^DO\s+NOT\s+MAKE\s+CHANGES\s+BELOW/i) {

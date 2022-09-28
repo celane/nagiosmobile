@@ -248,7 +248,7 @@ function hostservice_details($serviceID)
 			  </div> <!-- end header -->
 
 				<ul data-role="listview" data-inset="false" data-theme="f" data-dividertheme="a">
-				<li data-role="list-divider" role="heading">Information '.$action_service.'
+				<li data-role="list-divider" role="heading">Information '.$ACTION_SERVICE.'
 					<div class="information rounded">
 					  <dl>
 					  	<dt>Host: </dt><dd>'.htmlentities($host).'</dd>
