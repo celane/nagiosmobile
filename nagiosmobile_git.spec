@@ -38,7 +38,6 @@ install -d $RPM_BUILD_ROOT%{_datadir}/nagios/nagiosmobile
 cp -r class includes jquery.mobile-1.0 js \
    $RPM_BUILD_ROOT%{_datadir}/nagios/nagiosmobile/
 install *.php *.png *.gif $RPM_BUILD_ROOT%{_datadir}/nagios/nagiosmobile/
-rm $RPM_BUILD_ROOT%{_datadir}/nagios/nagiosmobile/INSTALL.php
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/
 install nagiosmobile_apache.conf $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/nagios
