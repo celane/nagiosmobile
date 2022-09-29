@@ -13,7 +13,7 @@ License:        GNU 2.0
 
 URL:            https://github.com/celane/nagiosmobile
 #URL:            http://www.nagios.com/products/nagios-mobile
-Source:          https://github.com/celane/nagiosmobile/archive/refs/tags/nagiosmobile-%{version}-%{relnum}.tar.gz
+Source:         https://github.com/celane/nagiosmobile/archive/refs/tags/%{version}.tar.gz
 
 BuildRequires:  perl
 Requires:       php >= 8.0
@@ -24,7 +24,7 @@ Requires:       httpd
 Web interface from mobile devices to Nagios
 
 %prep
-%setup
+%setup 
 
 %build
 
@@ -37,7 +37,6 @@ install -d $RPM_BUILD_ROOT%{_datadir}/nagios/nagiosmobile
 cp -r class includes jquery.mobile-1.0 js \
    $RPM_BUILD_ROOT%{_datadir}/nagios/nagiosmobile/
 install *.php *.png *.gif $RPM_BUILD_ROOT%{_datadir}/nagios/nagiosmobile/
-rm $RPM_BUILD_ROOT%{_datadir}/nagios/nagiosmobile/INSTALL.php
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/
 install nagiosmobile_apache.conf $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/nagios
