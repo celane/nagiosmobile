@@ -102,7 +102,7 @@ function host_details($hostname)
                 $hostaction = "";
                 if ($ACTION_HOST != "")
                 {
-                        $hostaction = sprintf("<a href=\"".$ACTION_HOST."\"><img src=\"action.gif\"></a>",$host);
+                        $hostaction = sprintf("<a href=\"".$ACTION_HOST."\"><img src=\"action.gif\"></a>",urlencode($host));
                 }             
 		
 		$content .=' 
@@ -201,9 +201,6 @@ function hostservice_details($serviceID)
 	global $BASE_URL;
         global $ACTION_SERVICE;
 
-
-
-
 	$content = ''; 
 
 	foreach ($status["hosts"] as $host_id => $host_status) 
@@ -229,7 +226,8 @@ function hostservice_details($serviceID)
                         $serviceaction = "";
                         if ($ACTION_SERVICE != "")
                         {
-                                $serviceaction = sprintf("<a href=\"".$ACTION_SERVICE."\"><img src=\"action.gif\"></a>",$host,$service);
+                                $servdsc = str_replace(":","_",$service);
+                                $serviceaction = sprintf("<a href=\"".$ACTION_SERVICE."\"><img src=\"action.gif\"></a>",urlencode($host),urlencode($servdsc));
                         }             
 			
 			$content .='
@@ -248,7 +246,7 @@ function hostservice_details($serviceID)
 			  </div> <!-- end header -->
 
 				<ul data-role="listview" data-inset="false" data-theme="f" data-dividertheme="a">
-				<li data-role="list-divider" role="heading">Information '.$ACTION_SERVICE.'
+				<li data-role="list-divider" role="heading">Information '.$serviceaction.'
 					<div class="information rounded">
 					  <dl>
 					  	<dt>Host: </dt><dd>'.htmlentities($host).'</dd>

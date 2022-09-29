@@ -1,7 +1,7 @@
 # build from .tar.gz version
 #
 %define version 1.03
-%define relnum 5
+%define relnum 8
 %define NVdir %{name}-%{version}
 
 Name:           nagiosmobile
@@ -13,7 +13,7 @@ License:        GNU 2.0
 
 URL:            https://github.com/celane/nagiosmobile
 #URL:            http://www.nagios.com/products/nagios-mobile
-Source:          https://github.com/celane/nagiosmobile/archive/refs/tags/nagiosmobile-1.03-5.tar.gz
+Source:          https://github.com/celane/nagiosmobile/archive/refs/tags/nagiosmobile-%{version}-%{relnum}.tar.gz
 
 BuildRequires:  perl
 Requires:       php >= 8.0

@@ -1,5 +1,5 @@
 %define version 1.03
-%define relnum 7
+%define relnum 8
 %define NVdir %{name}-%{version}
 
 Name:           nagiosmobile
