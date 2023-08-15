@@ -76,7 +76,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-function each(&$arr) {
+function myeach(&$arr) {
     $key = key($arr);
     $result = ($key === null) ? false : [$key, current($arr), 'key' => $key, 'value' => current($arr)];
     next($arr);
@@ -193,7 +193,7 @@ function calc_global_stats($status)
 		"service_acknowledged"=> 0,
         );
 
-    while (list($host,$host_status) = each($status["hosts"])) 
+    while (list($host,$host_status) = myeach($status["hosts"])) 
     {
 		//handle fix for users who are auth to see services but not the host 
 		if(isset($host_status['current_state']) ) 
@@ -224,7 +224,7 @@ function calc_global_stats($status)
 		
 		//handle services under host 
         if (isset($host_status["services"])) {
-            while (list($service_desc,$service_status) = each($host_status["services"])) 
+            while (list($service_desc,$service_status) = myeach($host_status["services"])) 
 		{
                 switch ($service_status["current_state"]) 
 				{

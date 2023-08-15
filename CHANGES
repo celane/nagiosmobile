@@ -1,3 +1,8 @@
+1.03-9 Aug 15 2023
+==================
+change "each()" to "myeach()"  to avoid function redefinition error,
+even thought the builtin each() is deprecated. 
+
 1.03 April 10 2013
 ==================
 - Fixed permissions bug where host escalations were not properly authorized their contacts

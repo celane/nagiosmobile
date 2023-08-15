@@ -1,5 +1,5 @@
 %define version 1.03
-%define relnum 8
+%define relnum 9
 %define NVdir %{name}-%{version}
 
 Name:           nagiosmobile
@@ -57,5 +57,5 @@ cd %{_sysconfdir}/nagios
 perl update_nagiosmobile_config.pl %{_datadir}/nagios/nagiosmobile/include.inc.php
 
 %changelog
-* Wed Aug 10 2022 lane@duphy4.physics.drexel.edu
+* Wed Aug 10 2022 lane@dchooz.org
 - 
