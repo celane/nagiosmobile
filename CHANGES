@@ -1,3 +1,9 @@
+
+1.03-10 Sep 6 2025
+==================
+index.php: added host_5 handling
+removed all 'back button' stuff, since didn't work.
+
 1.03-9 Aug 15 2023
 ==================
 change "each()" to "myeach()"  to avoid function redefinition error,
