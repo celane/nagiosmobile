@@ -1,8 +1,12 @@
-# build from .tar.gz version
+# 
+# build from github release if local not available
 #
+%global _disable_source_fetch 0
+# only want the previous if building from github
 %define version 1.03
 %define relnum 10
 %define NVdir %{name}-%{version}
+%global debug_package %{nil}
 
 Name:           nagiosmobile
 Version:        %{version}
@@ -13,7 +17,7 @@ License:        GNU 2.0
 
 URL:            https://github.com/celane/nagiosmobile
 #URL:            http://www.nagios.com/products/nagios-mobile
-Source:         https://github.com/celane/nagiosmobile/archive/refs/tags/%{version}.tar.gz
+Source:         https://github.com/celane/nagiosmobile/archive/refs/tags/v%{version}-%{relnum}.tar.gz
 
 BuildRequires:  perl
 BuildRequires:  help2man
@@ -25,7 +29,7 @@ Requires:       httpd
 Web interface from mobile devices to Nagios
 
 %prep
-%setup 
+%setup -n %{name}-%{version}-%{relnum}
 
 %build
 help2man ./nagiosmobile_transurl -N -o nagiosmobile_transurl.man --version-string=%{version}
@@ -44,17 +48,17 @@ install update_nagiosmobile_config.pl $RPM_BUILD_ROOT%{_sysconfdir}/nagios/
 install -d $RPM_BUILD_ROOT%{_sbindir}
 install nagiosmobile_transurl $RPM_BUILD_ROOT%{_sbindir}
 install -d $RPM_BUILD_ROOT%{_mandir}/man1
-install nagiosmobile_transurl $RPMBUILDROOT%{_mandir}/man1
+install nagiosmobile_transurl $RPM_BUILD_ROOT%{_mandir}/man1
 install -d $RPM_BUILD_ROOT%{_defaultdocdir}/%{name}
 install LICENSE README CHANGES TODO.txt sms_notification.cfg nagiosmobile_apache.conf $RPM_BUILD_ROOT%{_defaultdocdir}/%{name}
 
 
 %files
 %doc LICENSE README CHANGES TODO.txt sms_notification.cfg nagiosmobile_apache.conf
-%{_datadir}/nagios/nagiosmobile/*
+%attr(0755,root,-) %{_datadir}/nagios/nagiosmobile/*
 %{_mandir}/man1/*
 %attr(0755,root,-) %{_sysconfdir}/nagios/update_nagiosmobile_config.pl
-%attr(0755,root,-) %{_sbindir}nagiosmobile_transurl
+%attr(0755,root,-) %{_sbindir}/nagiosmobile_transurl
 
 
 %post
