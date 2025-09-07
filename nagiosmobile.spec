@@ -1,7 +1,7 @@
 # build from .tar.gz version
 #
 %define version 1.03
-%define relnum 9
+%define relnum 10
 %define NVdir %{name}-%{version}
 
 Name:           nagiosmobile
@@ -16,6 +16,7 @@ URL:            https://github.com/celane/nagiosmobile
 Source:         https://github.com/celane/nagiosmobile/archive/refs/tags/%{version}.tar.gz
 
 BuildRequires:  perl
+BuildRequires:  help2man
 Requires:       php >= 8.0
 Requires:       nagios
 Requires:       httpd
@@ -27,6 +28,7 @@ Web interface from mobile devices to Nagios
 %setup 
 
 %build
+help2man ./nagiosmobile_transurl -N -o nagiosmobile_transurl.man --version-string=%{version}
 
 %install
 if [ "$RPM_BUILD_ROOT" != "/" ]; then
@@ -37,24 +39,34 @@ install -d $RPM_BUILD_ROOT%{_datadir}/nagios/nagiosmobile
 cp -r class includes jquery.mobile-1.0 js \
    $RPM_BUILD_ROOT%{_datadir}/nagios/nagiosmobile/
 install *.php *.png *.gif $RPM_BUILD_ROOT%{_datadir}/nagios/nagiosmobile/
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/
-install nagiosmobile_apache.conf $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/nagios
 install update_nagiosmobile_config.pl $RPM_BUILD_ROOT%{_sysconfdir}/nagios/
+install -d $RPM_BUILD_ROOT%{_sbindir}
+install nagiosmobile_transurl $RPM_BUILD_ROOT%{_sbindir}
+install -d $RPM_BUILD_ROOT%{_mandir}/man1
+install nagiosmobile_transurl $RPMBUILDROOT%{_mandir}/man1
 install -d $RPM_BUILD_ROOT%{_defaultdocdir}/%{name}
-install LICENSE README CHANGES TODO.txt $RPM_BUILD_ROOT%{_defaultdocdir}/%{name}
+install LICENSE README CHANGES TODO.txt sms_notification.cfg nagiosmobile_apache.conf $RPM_BUILD_ROOT%{_defaultdocdir}/%{name}
 
 
 %files
-%doc LICENSE README CHANGES TODO.txt
+%doc LICENSE README CHANGES TODO.txt sms_notification.cfg nagiosmobile_apache.conf
 %{_datadir}/nagios/nagiosmobile/*
-%{_sysconfdir}/httpd/conf.d/*
-%{_sysconfdir}/nagios/update_nagiosmobile_config.pl
+%{_mandir}/man1/*
+%attr(0755,root,-) %{_sysconfdir}/nagios/update_nagiosmobile_config.pl
+%attr(0755,root,-) %{_sbindir}nagiosmobile_transurl
+
 
 %post
 cd %{_sysconfdir}/nagios
 perl update_nagiosmobile_config.pl %{_datadir}/nagios/nagiosmobile/include.inc.php
+echo "Example Apache config file for nagiosmobile is in %{_defaultdocdir}/%{name}"
+
 
 %changelog
+* Sat Sep 6 2025 lane@dchooz.org
+- minor updates, plus add util for translating 'main' nagios urls
+- to nagiosmobile urls, for notification purposes
+
 * Wed Aug 10 2022 lane@dchooz.org
 - 

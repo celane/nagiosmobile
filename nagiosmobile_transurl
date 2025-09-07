@@ -1,0 +1,86 @@
+#!/usr/bin/perl -w
+use strict;
+use vars qw($STATUS_FILE $BASE_URL);
+
+#---------------these are updated by update_nagiosmobile_config.pl -----
+$STATUS_FILE = "/var/log/nagios/status.dat";
+#------------------------------------AUTO EDIT END----------------------
+
+$BASE_URL = "/nagiosmobile";       # from apache config
+my $MOBREF = "${BASE_URL}/index.php?";
+
+my $inurl = shift;
+if (!defined($inurl)) {
+    print "usage: $0 nagiosurl\n";
+    exit 0;
+}
+if ($inurl eq '--help') {
+    print "This program translates urls from the 'normal Nagios' ones that \n";
+    print "point to host or service status pages, to the urls that point to\n";
+    print "equivalent nagiosmobile status pages. \n\n";
+    print "That's simple for hosts, but tricky for services, because the\n";
+    print "nagiosmobile code uses a 'serviceID' to identify services, which\n";
+    print "comes from an index to the service in the Nagios status.dat file\n";
+    print "\n";
+    print "The two configuration values that need to be set in this script\n";
+    print "are '\$STATUS_FILE' which points to the location of the status.dat\n";
+    print "file (typically /var/log/nagios/status.dat), and '\$BASE_URL'\n";
+    print "(typically /nagiosmobile).  The status.dat location will \n";
+    print "updated by running the 'update_nagiosmobile_config.pl' script\n";
+    print "in the main nagiosmobile directory, but the BASE_URL depends on\n";
+    print "how you have your httpd server set up for nagiosmobile. The\n";
+    print "example 'nagiosmobile_apache.conf' has a line\n";
+    print "Alias /nagiosmobile \"/usr/share/nagios/nagiosmobile\"\n";
+    print "...and it's that first /nagiosmobile that should be used as\n";
+    print "the BASE_URL.\n";
+    
+    exit 0;
+}
+# sample url
+#https://www.example.com/nagios/cgi-bin/extinfo.cgi?type=2&host=node&service=temp
+my ($urlhost, $host, $srv);
+if ($inurl =~ /^https?:\/\/([\w\.]+)\//i) {
+    $urlhost = $1;
+} else {
+    die "error parsing $inurl: no nagios host";
+}
+if ($inurl =~ /(\?|\&)host=(\w+)/i) {
+    $host = $2;
+} else {
+    die "error parsing $inurl: no host for alert";
+}
+
+if ($inurl =~ /(\?|\&)service=(\w+)/i) {
+    $srv = $2;
+
+} else {
+    print "https://$urlhost${MOBREF}page=hostdetail&host=$host\n";
+    exit 0;
+}
+
+
+
+open(S,"<$STATUS_FILE") || die 'failed to open status file $STATUS_FILE';
+my $id = -1;
+my $inserv = 0;
+while (<S>) {
+    if (/^servicestatus\s*{/) {
+	$inserv = 1;
+	$id++;
+    } elsif ($inserv && /^\s*}\s*$/) {
+	print "https://$urlhost${MOBREF}page=servicedetail&service=$id\n";
+	close(S);
+	exit 0;
+    } elsif ($inserv && /^\s+host_name=(\S+)$/) {
+	if ($1 ne $host) {
+	    $inserv = 0;
+	    next;
+	}
+    } elsif ($inserv && /^\s*service_description=(\S+)$/) {
+	if ($1 ne $srv) {
+	    $inserv = 0;
+	    next;
+	}
+    }
+}
+die "host + service not found in $STATUS_FILE";

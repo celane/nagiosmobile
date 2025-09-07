@@ -4,8 +4,17 @@ use File::Temp qw/ tempfile /;
 use vars qw($CGI $CFG $STATUS $CMD $OBJCF);
 
 my $configfile = shift;
-die "need include.inc.php on command line" unless defined($configfile) &&
-    -e $configfile;
+$configfile = '/usr/share/nagios/nagiosmobile/include.inc.php'
+    unless defined $configfile;
+my $transurl = shift;
+$transurl = '/usr/sbin/nagiosmobile_transurl' unless defined $transurl;
+
+if (! -e $configfile || ! -e $transurl) {
+    print "usage: $0 [.../include.inc.php] [.../nagiosmobile_transurl]\n";
+    print "these files will be modified based on Nagios/pnp4nagios config\n";
+    die "missing file(s) to edit";
+}
+
 
 open(RPM,"rpm -q nagios -l|")
     or die "unable to open rpm -q nagios for file list";
@@ -67,7 +76,7 @@ while (<INC_IN>) {
             print $fh "\$ACTION_HOST = \"/pnp4nagios/index.php/mobile/graph/\%s/_HOST_\";\n";
         } elsif (/^\$ACTION_SERVICE/ && $pnp4nagios) { 
             print $fh "\$ACTION_SERVICE =  \"/pnp4nagios/index.php/mobile/graph/\%s/\%s\";\n";
-        } elsif (/^DO\s+NOT\s+MAKE\s+CHANGES\s+BELOW/i) {
+        } elsif (/DO\s+NOT\s+MAKE\s+CHANGES\s+BELOW/i) {
             $doedit = 0;
 
         } else {
@@ -84,3 +93,34 @@ rename($configfile,"$configfile.bak");
 rename($filename,$configfile);
 chmod 0666,$configfile;
 
+#-----------------now edit the nagiosmobile_trans script------------------
+
+open(TRANS_IN,"<$transurl")
+    or die "unable to open $transurl for reading";
+
+($fh,$filename) = tempfile("${transurl}_XXXXXX", UNLINK => 0);
+die "unable to open tempfile" unless defined $fh;
+
+$doedit = 1;
+
+while (<TRANS_IN>) {
+
+    if ($doedit) {
+        if (/^\$STATUS_FILE/) {
+            print $fh "\$STATUS_FILE = \"$STATUS\";\n";
+        } elsif (/AUTO EDIT END/i) {
+            $doedit = 0;
+
+        } else {
+            print $fh $_;
+        }
+    } else {
+        print $fh $_;
+    }
+}
+
+close(INC_IN);
+
+rename($transurl,"$transurl.bak");
+rename($filename,$transurl);
+chmod 0755,$transurl;
